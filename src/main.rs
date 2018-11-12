@@ -1,6 +1,11 @@
+#[macro_use]
+extern crate clap;
+
 use std::ffi::OsStr;
 use std::fs::read_dir;
 use std::path::{Path, PathBuf};
+
+use clap::{App, AppSettings, Arg};
 
 fn find_in_dir(file_name: &str, dir_path: &str) -> Option<PathBuf> {
     let mut current_path = Path::new(dir_path).canonicalize().unwrap();
@@ -21,14 +26,36 @@ fn find_in_dir(file_name: &str, dir_path: &str) -> Option<PathBuf> {
     None
 }
 
-fn main() -> std::io::Result<()> {
-    let to_find = "adoijaisjd";
+fn main() {
+    let matches = App::new("Detect")
+        .version(crate_version!())
+        .setting(AppSettings::ColoredHelp)
+        .about("Traverse up parents looking for a file/folder by name")
+        .arg(
+            Arg::with_name("file_name")
+                .help("The name of the file/folder to look for")
+                .required(true)
+                .index(1),
+        )
+        .arg(
+            Arg::with_name("location")
+                .help("Get the directory of the found file, instead of full path to the file")
+                .short("l")
+                .long("location"),
+        )
+        .get_matches();
+
+    let to_find = matches.value_of("file_name").unwrap();
+    let location = matches.is_present("location");
     let start = ".";
 
     match find_in_dir(to_find, start) {
-        Some(result) => println!("Found: {:?}", result),
-        None => println!("Didn't find it"),
+        Some(mut result) => {
+            if location {
+                result.pop();
+            }
+            println!("{}", result.display());
+        }
+        None => eprintln!("File not found"),
     }
-
-    Ok(())
 }
