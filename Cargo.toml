@@ -1,6 +1,6 @@
 [package]
 name = "rdetect"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Axel Örn Sigurðsson <axel@absalon.is>"]
 description = "Traverse up directories to find files/folders by name"
 repository = "https://github.com/ikornaselur/detect"
