@@ -1,7 +1,11 @@
 [package]
-name = "detect"
+name = "rdetect"
 version = "0.1.0"
 authors = ["Axel Örn Sigurðsson <axel@absalon.is>"]
+description = "Traverse up directories to find files/folders by name"
+repository = "https://github.com/ikornaselur/detect"
+license = "MIT"
+readme = "readme.md"
 
 [dependencies]
 clap = "2.32.0"
