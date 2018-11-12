@@ -4,6 +4,7 @@ extern crate clap;
 use std::ffi::OsStr;
 use std::fs::read_dir;
 use std::path::{Path, PathBuf};
+use std::process::exit;
 
 use clap::{App, AppSettings, Arg};
 
@@ -49,13 +50,17 @@ fn main() {
     let location = matches.is_present("location");
     let start = ".";
 
-    match find_in_dir(to_find, start) {
+    exit(match find_in_dir(to_find, start) {
         Some(mut result) => {
             if location {
                 result.pop();
             }
             println!("{}", result.display());
+            0
         }
-        None => eprintln!("File not found"),
-    }
+        None => {
+            eprintln!("File not found");
+            1
+        }
+    });
 }
