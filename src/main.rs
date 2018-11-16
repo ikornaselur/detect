@@ -41,10 +41,10 @@ fn main() {
                 .required(true)
                 .index(1),
         ).arg(
-            Arg::with_name("location")
+            Arg::with_name("full_path")
                 .help("Get the directory of the found file, instead of full path to the file")
-                .short("l")
-                .long("location"),
+                .short("f")
+                .long("full-path"),
         ).arg(
             Arg::with_name("max_depth")
                 .help("The max depth to search up, 1 being only current directory")
@@ -55,7 +55,7 @@ fn main() {
         ).get_matches();
 
     let to_find = matches.value_of("file_name").unwrap();
-    let location = matches.is_present("location");
+    let full_path = matches.is_present("full_path");
     let max_depth = if matches.is_present("max_depth") {
         value_t!(matches, "max_depth", usize).unwrap_or_else(|e| e.exit())
     } else {
@@ -65,7 +65,7 @@ fn main() {
 
     exit(match find_in_dir(to_find, start, max_depth) {
         Some(mut result) => {
-            if location {
+            if !full_path {
                 result.pop();
             }
             println!("{}", result.display());
