@@ -71,9 +71,6 @@ fn main() {
             println!("{}", result.display());
             0
         }
-        None => {
-            eprintln!("File not found");
-            1
-        }
+        None => 1,
     });
 }
